@@ -84,6 +84,53 @@ CREATE TABLE "orders" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id
 
 # How much would it cost to buy one of each tool?
 
+sqlite> SELECT items.id, title, category, price FROM items WHERE category LIKE "%Tool%";
+13|Small Plastic Pants|Beauty, Shoes & Tools|7476
+20|Gorgeous Plastic Shoes|Industrial & Tools|2851
+32|Practical Rubber Shirt|Tools|1107
+49|Incredible Granite Gloves|Garden, Toys & Tools|798
+50|Gorgeous Rubber Chair|Tools, Garden & Movies|3335
+51|Rustic Steel Shirt|Tools, Clothing & Toys|615
+59|Fantastic Granite Computer|Tools, Jewelery & Industrial|7606
+64|Gorgeous Plastic Computer|Tools, Garden & Games|1913
+66|Gorgeous Granite Car|Tools & Computers|2768
+67|Practical Concrete Table|Sports & Tools|3160
+80|Incredible Plastic Gloves|Tools|5437
+84|Rustic Cotton Chair|Games, Sports & Tools|5210
+87|Awesome Plastic Shirt|Tools|839
+97|Incredible Granite Computer|Books, Toys & Tools|2377
+99|Rustic Rubber Hat|Tools & Kids|985
+
+sqlite> SELECT sum(price) FROM items WHERE category LIKE "%Tool%";
+46477
+
 # What item was ordered most often? What grossed the most money?
+sqlite> SELECT title FROM items INNER JOIN orders ON items.id=item_id ORDER BY quantity DESC LIMIT 1;
+Gorgeous Granite Car
+
+sqlite> SELECT title, (orders.quantity*items.price) FROM ITEMS INNER JOIN orders ON items.id=item_id ORDER BY (orders.quantity*items.price) DESC LIMIT 1;
+Awesome Granite Pants|97900
+
 # What user spent the most?
+sqlite> select first_name, last_name, items.price*orders.quantity FROM users INNER JOIN orders ON (users.id=user_id) INNER JOIN items ON (items.id=item_id) ORDER BY items.price*orders.quantity DESC LIMIT 1;
+Missouri|Carroll|97900
+
 # What were the top 3 highest grossing categories?
+
+sqlite> SELECT category, (price*orders.quantity) FROM items INNER JOIN orders ON (item_id=items.id) ORDER BY (price*orders.quantity) DESC LIMIT 3;
+Toys & Books|97900
+Health & Grocery|91290
+Games|90000
+
+
+
+
+
+
+
+
+
+
+
+
+
